@@ -1,0 +1,31 @@
+<template>
+  <div class="header-box">
+    <div class="logo"><img src="https://www.imooc.com/static/img/index/logo.png" alt=""></div>
+    <header-nav></header-nav>
+  </div>
+</template>
+
+<script>
+import HeaderNav from './header-nav'
+export default {
+  components:{
+    HeaderNav
+  }
+}
+</script>
+<style lang="stylus" scoped>
+  .header-box
+    width: 100%;
+    height: 72px;
+    box-shadow: 0 4px 8px 0 rgba(7, 17, 27, 0.1);
+    background-color: #ffffff;
+    .logo
+      display: inline-block;
+      vertical-align: middle;
+      margin: 0 20px;
+      width: 140px;
+      height: 72px;
+      img 
+        display: block;
+        height: 100%;
+</style>

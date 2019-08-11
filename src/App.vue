@@ -1,25 +1,20 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
+    <my-header></my-header>
     <router-view/>
+    <my-footer></my-footer>
+    <side-bar></side-bar>
   </div>
 </template>
-<style lang="stylus">
-#app
-  font-family 'Avenir', Helvetica, Arial, sans-serif
-  -webkit-font-smoothing antialiased
-  -moz-osx-font-smoothing grayscale
-  text-align center
-  color #2c3e50
-
-#nav
-  padding 30px
-  a
-    font-weight bold
-    color #2c3e50
-    &.router-link-exact-active
-      color #42b983
-</style>
+<script>
+import MyHeader from './base/header/header.vue'
+import MyFooter from './base/footer/footer.vue'
+import SideBar from './base/sidebar/sidebar.vue'
+export default {
+  components: {
+    MyHeader,
+    MyFooter,
+    SideBar
+  }
+}
+</script>
