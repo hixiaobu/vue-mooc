@@ -35,6 +35,7 @@ export default {
     padding: 0 16px;
     transform: translate(0,-50%);
     box-shadow: 0px 4px 12px 0px rgba(7, 17, 27, 0.1);
+    background-color: #ffffff !important;
     .sidebar-item
       padding: 16px 0;
       width: 26px;
