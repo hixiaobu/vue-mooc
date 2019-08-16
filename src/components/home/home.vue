@@ -2,7 +2,7 @@
   <div class="home-container">
     <!-- 课程模块 -->
     <div class="course-container">
-      <div  class="course-box"  v-for="(items,index) in courseDataList" :key="index">
+      <div  class="course-box"  v-for="(items,index) in courseList" :key="index">
         <div class="course-items">
           <!-- 课程标题 -->
           <title-module class="course-title" :title="items.title" :left="items.leftIcon" :right="items.rightIcon"></title-module>
@@ -17,6 +17,10 @@
           <course-module :courseList='items.data'></course-module>
         </div>
       </div>
+    </div>
+    <!-- 精彩手记及猿问 -->
+    <div class="article-container">
+      <article-module :articleList="articleList"></article-module>
     </div>
     <!-- 全明星模块 -->
     <allstar-module :allstarList="allstarList"></allstar-module>
@@ -37,17 +41,20 @@ import { ERR_OK } from "@/api/config.js"
 import TitleModule from './title.vue'
 import CourseModule from '@/base/course/course.vue'
 import AllstarModule from './allstar.vue'
+import ArticleModule from './article.vue'
 export default {
   name: "Home",
   components: {
     TitleModule,
     CourseModule,
-    AllstarModule
+    AllstarModule,
+    ArticleModule
   },
   data() {
     return {
-      courseDataList: [], //课程数据
+      courseList: [], //课程数据
       allstarList: [],//全明星数据
+      articleList:[],//精彩讲师及猿问
     };
   },
   mounted() {
@@ -72,7 +79,7 @@ export default {
       getHomeCourse().then(res => {
         let { code, data } = res;
         if (code === ERR_OK) {
-          this.courseDataList = data;
+          this.courseList = data;
         }
       });
     },
@@ -90,7 +97,7 @@ export default {
       getHomeArticle().then(res => {
         let { code, data } = res;
         if (code === ERR_OK) {
-          console.log(data);
+          this.articleList=data;
         }
       });
     },
@@ -112,7 +119,7 @@ export default {
         }
       });
     },
-    // 背景样式
+    // 课程banner背景样式
     getStyle(item) {  return `url(${item.url}) no-repeat center center` },
     
   }

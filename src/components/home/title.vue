@@ -8,7 +8,7 @@
 </template>
 <script>
 export default {
-    name: 'ModuleTitle',
+    name: 'Title',
     props: {
         title: String,
         left: String,

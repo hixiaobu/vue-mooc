@@ -43,12 +43,12 @@ export default {
     methods: {
         // 全明星样式
         getItemClass(code) {
-        const calssMap={
-            "1":"purple",
-            "2":"blue",
-            "3":"green"
-        }
-        return calssMap[code]
+            const calssMap={
+                "1":"purple",
+                "2":"blue",
+                "3":"green"
+            }
+            return calssMap[code]
         }
     }
 }
