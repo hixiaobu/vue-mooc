@@ -1,5 +1,7 @@
 <template>
   <div class="home-container">
+    <!-- 头部导航 -->
+    <header-module :headerList="headerList"></header-module>
     <!-- 课程模块 -->
     <div class="course-container">
       <div  class="course-box"  v-for="(items,index) in courseList" :key="index">
@@ -39,6 +41,7 @@ import {
 // import * as API from '@/api/home.js'  全部接口取别名  API.getHomeCourse
 import { ERR_OK } from "@/api/config.js"
 import TitleModule from './title.vue'
+import HeaderModule from './header.vue'
 import CourseModule from '@/base/course/course.vue'
 import AllstarModule from './allstar.vue'
 import ArticleModule from './article.vue'
@@ -46,12 +49,14 @@ export default {
   name: "Home",
   components: {
     TitleModule,
+    HeaderModule,
     CourseModule,
     AllstarModule,
     ArticleModule
   },
   data() {
     return {
+      headerList: [],//头部数据
       courseList: [], //课程数据
       allstarList: [],//全明星数据
       articleList:[],//精彩讲师及猿问
@@ -72,6 +77,7 @@ export default {
       let { code, data } = await getHomeNav();
       if (code === ERR_OK) {
         console.log(data);
+        this.headerList=data;
       }
     },
     // 获取首页课程信息
