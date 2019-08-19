@@ -1,7 +1,8 @@
 <template>
   <div class="home-container">
     <!-- 头部导航 -->
-    <header-module :headerList="headerList"></header-module>
+    <header-module :headerList="headerList" :swiperList="swiperList"></header-module>
+    <!-- <home-swiper :swiperList="swiperList"></home-swiper> -->
     <!-- 课程模块 -->
     <div class="course-container">
       <div  class="course-box"  v-for="(items,index) in courseList" :key="index">
@@ -24,6 +25,8 @@
     <div class="article-container">
       <article-module :articleList="articleList"></article-module>
     </div>
+    <!-- 慕课精英名师 -->
+    <teacher-module :teacherList="teacherList"></teacher-module>
     <!-- 全明星模块 -->
     <allstar-module :allstarList="allstarList"></allstar-module>
   </div>
@@ -45,6 +48,8 @@ import HeaderModule from './header.vue'
 import CourseModule from '@/base/course/course.vue'
 import AllstarModule from './allstar.vue'
 import ArticleModule from './article.vue'
+import TeacherModule from './teacher.vue'
+import HomeSwiper from './swiper.vue'
 export default {
   name: "Home",
   components: {
@@ -52,7 +57,9 @@ export default {
     HeaderModule,
     CourseModule,
     AllstarModule,
-    ArticleModule
+    ArticleModule,
+    TeacherModule,
+    HomeSwiper
   },
   data() {
     return {
@@ -60,6 +67,8 @@ export default {
       courseList: [], //课程数据
       allstarList: [],//全明星数据
       articleList:[],//精彩讲师及猿问
+      swiperList:[],//头部轮播数据
+      teacherList:[]//慕课精英名师
     };
   },
   mounted() {
@@ -94,7 +103,7 @@ export default {
       getHomeSlider().then(res => {
         let { code, data } = res;
         if (code === ERR_OK) {
-          console.log(data);
+          this.swiperList=data;
         }
       });
     },
@@ -112,7 +121,7 @@ export default {
       getHomeTeacher().then(res => {
         let { code, data } = res;
         if (code === ERR_OK) {
-          console.log(data);
+          this.teacherList=data;
         }
       });
     },

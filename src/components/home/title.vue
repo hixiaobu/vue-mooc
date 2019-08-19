@@ -2,7 +2,7 @@
     <!-- 标题 -->
     <div class="module-title">
         <span class="title-icon" :style="getPositionStyle(left)"></span>
-        <div class="title-text">{{title}}</div>
+        <div class="title-text" :style="{color:color}">{{title}}</div>
         <span class="title-icon" :style="getPositionStyle(right)"></span>
     </div>
 </template>
@@ -11,6 +11,7 @@ export default {
     name: 'Title',
     props: {
         title: String,
+        color: String,
         left: String,
         right: String
     },

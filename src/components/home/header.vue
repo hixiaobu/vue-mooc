@@ -10,10 +10,14 @@
       </div>
       <!-- 右边轮播 -->
       <div class="header-box">
+        <home-swiper :swiperList="swiperList"></home-swiper>
+        <div class="bottom-box">
 
+        </div>
       </div>     
       <!-- menu课程数据 -->
       <div class="submenu" v-show="Object.keys(currentList).length > 0">
+        <!-- 课程分类 -->
         <div class="menu-box">
           <div class="subinner-box" v-for="(itemsub,index) in currentList.tags" :key="index">
             <p class="title-box">
@@ -25,14 +29,15 @@
             </div>
           </div>
         </div>
+        <!-- 热门推荐 -->
         <div class="recomment-box">
           <div class="course-list" v-for="(itemlist,index) in currentList.course" :key="index">
             <img :src="itemlist.img" alt="">
             <div class="course-box">
               <p class="course-title">{{itemlist.title}}</p>
               <div class="course-info">
-                <span>¥ {{itemlist.money}}</span>
-                <span>{{itemlist.rank}}</span>
+                <span>¥ {{itemlist.money}}<i class="iconfont icon-dian"></i></span>
+                <span>{{itemlist.rank}}<i class="iconfont icon-dian"></i></span>
                 <span><i class="iconfont icon-ren"></i>{{itemlist.number}}</span>
               </div>
             </div>
@@ -44,9 +49,13 @@
 </template>
 
 <script>
+import HomeSwiper from './swiper.vue'
 export default {
   name:'Header',
-  props: ['headerList'],
+  props: ['headerList','swiperList'],
+  components: {
+    HomeSwiper
+  },
   data () {
     return {
       currentList: {}
@@ -59,7 +68,7 @@ export default {
     },
     // 鼠标离开
     handleMouseLeave () {
-      // this.currentList = []
+      this.currentList = []
     }
   }
 }
@@ -155,7 +164,7 @@ export default {
         box-sizing: border-box;
         .course-list
           display: inline-block;
-          width: 50%;
+          // width: 50%;
           height: 60px;
           padding-left: 48px;
           margin-bottom: 36px;
@@ -169,6 +178,7 @@ export default {
           .course-box
             display: inline-block;
             margin-left: 16px;
+            vertical-align: top;
             .course-title
               width: 232px;
               font-size: 12px;
@@ -179,11 +189,27 @@ export default {
               white-space: nowrap;
             .course-info
               display: inline-block;
+              line-height: 20px;
               span 
                 font-size: 12px;
                 color: #4D555D;
-                line-height: 20px;
+                &:nth-child(1)
+                  font-weight: bold;
+                .iconfont
+                  font-size: 14px;
+                  line-height: 20px;
+                .icon-ren
+                  margin-right: 2px;
+                  font-size: 10px;
     .header-box
       flex: 1;
       width: 936px;
+      .bottom-box
+        position: relative;
+        height: 128px;
+        padding: 0 18px;
+        overflow: hidden;
+        box-shadow: 0px 4px 8px 0px rgba(7, 17, 27, 0.1);
+        background-color: #fff;
+        text-align: center;
 </style>
