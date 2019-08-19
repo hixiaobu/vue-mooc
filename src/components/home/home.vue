@@ -1,7 +1,7 @@
 <template>
   <div class="home-container">
     <!-- 头部导航 -->
-    <header-module :headerList="headerList" :swiperList="swiperList"></header-module>
+    <header-module :headerList="headerList"></header-module>
     <!-- <home-swiper :swiperList="swiperList"></home-swiper> -->
     <!-- 课程模块 -->
     <div class="course-container">
@@ -73,7 +73,6 @@ export default {
   },
   mounted() {
     this.getHomeNavData();
-    this.getHomeSliderData();
     this.getHomeCourseData();
     this.getHomeArticleData();
     this.getHomeTeacherData();
@@ -95,15 +94,6 @@ export default {
         let { code, data } = res;
         if (code === ERR_OK) {
           this.courseList = data;
-        }
-      });
-    },
-    // 获取首页轮播数据
-    getHomeSliderData() {
-      getHomeSlider().then(res => {
-        let { code, data } = res;
-        if (code === ERR_OK) {
-          this.swiperList=data;
         }
       });
     },

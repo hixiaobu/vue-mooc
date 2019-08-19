@@ -1,6 +1,6 @@
 <template>
-  <div class="wrapper">
-    <swiper :options="swiperOption" v-if="showSwiper">
+  <div class="wrapper" v-if="swiperList && swiperList.length">
+    <swiper :options="swiperOption">
       <!-- <swiper-slide>I'm Slide 1</swiper-slide>
       <swiper-slide>I'm Slide 2</swiper-slide>
       <swiper-slide>I'm Slide 3</swiper-slide>
@@ -26,27 +26,29 @@
 </template>
 <script>
 export default {
-  name:'Swiper',
   props:{
-    swiperList: Array
+    swiperList: {
+      type: Array,
+      default () {
+        return []
+      }
+    }
   },
   data () {
     return {
       swiperOption: {
-        pagination:".swiper-pagination",
+        pagination: {
+          el: ".swiper-pagination",
+        },
         loop:true
       }
     }
   },
-  created () {
-    console.log(this.swiperList)
-  },
-  computed:{
-    showSwiper(){
-      //console.log(this.swiperList)
-      //return this.swiperList.length
-    }
-  }
+  // computed:{
+  //   showSwiper(){
+  //     return this.swiperList && this.swiperList.length
+  //   }
+  // }
 
 }
 </script>
@@ -54,6 +56,16 @@ export default {
 // >>> 穿透
   .wrapper >>> .swiper-pagination-bullet-active
     background :#fff !important
+  .wrapper >>> .swiper-pagination
+    bottom: 20px;
+    padding-right: 24px;
+    width: 100%;
+    text-align: right;
+    box-sizing: border-box;
+    line-height: 12px;
+  .wrapper >>> .swiper-pagination-bullet
+    background: rgba(7, 17, 27, 0.8);
+    opacity: unset;
   .wrapper
     overflow: hidden;
     width: 100%;

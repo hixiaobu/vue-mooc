@@ -10,7 +10,7 @@
       </div>
       <!-- 右边轮播 -->
       <div class="header-box">
-        <home-swiper :swiperList="swiperList"></home-swiper>
+        <home-swiper :swiperList="swiperList" v-if="swiperList.length"></home-swiper>
         <div class="bottom-box">
 
         </div>
@@ -50,16 +50,22 @@
 
 <script>
 import HomeSwiper from './swiper.vue'
+import { getHomeSlider } from "@/api/home.js"
+import { ERR_OK } from "@/api/config.js"
 export default {
   name:'Header',
-  props: ['headerList','swiperList'],
+  props: ['headerList'],
   components: {
     HomeSwiper
   },
   data () {
     return {
+      swiperList: [],
       currentList: {}
     }
+  },
+  mounted () {
+    this.getHomeSliderData();
   },
   methods: {
     // 鼠标进入
@@ -69,6 +75,15 @@ export default {
     // 鼠标离开
     handleMouseLeave () {
       this.currentList = []
+    },
+    // 获取首页轮播数据
+    getHomeSliderData() {
+      getHomeSlider().then(res => {
+        let { code, data } = res;
+        if (code === ERR_OK) {
+          this.swiperList=data;
+        }
+      });
     }
   }
 }
