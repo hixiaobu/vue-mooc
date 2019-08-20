@@ -51,7 +51,7 @@ export default {
         // slidesPerGroup: 2,
         loop: true,
         autoplay:true,
-        loopFillGroupWithBlank: true,
+        // loopFillGroupWithBlank: true,
         pagination: {
           el: '.swiper-pagination',
           clickable: true,
@@ -93,6 +93,7 @@ export default {
       .title
        color: #ffffff;
       .wrapper
+        position: relative;
         width: 100%;
         height: 325px;
         >>> .swiper-pagination
@@ -109,7 +110,7 @@ export default {
           opacity: 1 !important;
         >>> .swiper-button-prev
           position: absolute;
-          left: -25px;
+          left: -50px;
           width: 48px;
           height: 48px;
           cursor: pointer;
@@ -122,18 +123,22 @@ export default {
             box-shadow: 0 2px 4px 0 rgba(28, 31, 33, 0.1);
         >>> .swiper-button-next
           position: absolute;
-          right : -25PX;
+          right : -50px;
           width: 48px;
           height: 48px;
           cursor: pointer;
           border-radius: 50%;
+          background-color: rgba(255, 255, 255, 0.1);   
           background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%2027%2044'%3E%3Cpath%20d%3D'M27%2C22L5%2C44l-4.2-4.2L18.6%2C22L0.8%2C4.2L5%2C0z'%20fill%3D'%239199A1'%2F%3E%3C%2Fsvg%3E");
           background-size: 16px 16px;
           &:hover
             background-color: #fff;
             box-shadow: 0 2px 4px 0 rgba(28, 31, 33, 0.1);
         .swiper-container
-          height: 100%;               
+          position: unset;
+          height: 100%;
+          .swiper-wrapper
+            position: unset;
           .swiper-slide
             display: flex;
             justify-content: space-between;
@@ -151,20 +156,15 @@ export default {
                 background-color: #fff;
                 box-shadow: 0 8px 16px 0 rgba(7, 17, 27, 0.2);
                 .headimg
-                  // width: 60px;
-                  // height: 60px;
-                  // margin-left: -30px;
-                  transform: translate(-50%,0);
-                  animation: myScale 0.3s ease-in-out;
-                  animation-fill-mode: forwards;
+                  transform-origin: top;
+                  transform: scale(0.6);
                 .name,.label
                   opacity: 0;
                 .introduction
-                  position: relative;
                   height: 168px;
                   top: -92px;
                   color: #07111B;
-              & p
+              p
                 display: block;
                 font-size: 12px;
                 color: #4D555D;
@@ -173,10 +173,11 @@ export default {
                 position: absolute;
                 top: -16.6px;
                 left: 50%;
-                transform: translate(-50%,0);
+                margin-left: -48px;
                 width: 96px;
                 height: 96px;
                 border-radius: 50%;
+                transition: transform 0.2s ease-in-out;
               .name
                 margin-top: 92px;
                 padding: 0 36px;
@@ -205,17 +206,5 @@ export default {
                 text-align: justify;
                 word-break: break-all;
                 font-weight: 400;
-    @keyframes myScale {
-      from{
-        width: 96px;
-        height: 96px;
-        //opacity: 0;
-        transform: scale(0);
-      }to{
-        width: 60px;
-        height: 60px;
-        //opacity: 1;
-        transform: scale(1);
-      }
-    }
+                transition: all 0.2s ease-in-out;
 </style>

@@ -34,13 +34,13 @@ export default {
           prevEl: '.swiper-button-prev',
         },
         autoplay :true,
-        loop :true,
+        loop:true,
         on: {
           //切换结束时
           slideChangeTransitionEnd:function(){
             //  alert(this.activeIndex);//切换结束时，告诉我现在是第几个slide
             // 向父组件header传递背景图片
-             _self.$emit('swiper',_self.swiperList[this.activeIndex-1].img)
+             _self.$emit('swiper',_self.swiperList[this.realIndex].img)
           },
         },
       }
