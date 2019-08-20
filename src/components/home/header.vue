@@ -10,10 +10,9 @@
       </div>
       <!-- 右边轮播 -->
       <div class="header-box">
-        <home-swiper :swiperList="swiperList" v-if="swiperList.length"></home-swiper>
-        <div class="bottom-box">
-
-        </div>
+        <home-swiper :swiperList="swiperList" v-if="swiperList.length" @swiper="getSwiper"></home-swiper>
+        <!-- 底部课程 -->
+        <employ-course></employ-course>
       </div>     
       <!-- menu课程数据 -->
       <div class="submenu" v-show="Object.keys(currentList).length > 0">
@@ -50,22 +49,18 @@
 
 <script>
 import HomeSwiper from './swiper.vue'
-import { getHomeSlider } from "@/api/home.js"
-import { ERR_OK } from "@/api/config.js"
+import EmployCourse from './employcourse.vue'
 export default {
   name:'Header',
-  props: ['headerList'],
+  props: ['headerList','swiperList'],
   components: {
-    HomeSwiper
+    HomeSwiper,
+    EmployCourse
   },
   data () {
     return {
-      swiperList: [],
-      currentList: {}
+      currentList:{}
     }
-  },
-  mounted () {
-    this.getHomeSliderData();
   },
   methods: {
     // 鼠标进入
@@ -75,15 +70,10 @@ export default {
     // 鼠标离开
     handleMouseLeave () {
       this.currentList = []
-    },
-    // 获取首页轮播数据
-    getHomeSliderData() {
-      getHomeSlider().then(res => {
-        let { code, data } = res;
-        if (code === ERR_OK) {
-          this.swiperList=data;
-        }
-      });
+    }, 
+    // 向父组件传递背景图片
+    getSwiper(img){
+      this.$emit('swiper',img)
     }
   }
 }

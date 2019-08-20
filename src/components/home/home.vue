@@ -1,8 +1,9 @@
 <template>
   <div class="home-container">
+    <!-- 头部背景 -->
+    <div class="bg-mask" :style="getBackgroundImage"></div>
     <!-- 头部导航 -->
-    <header-module :headerList="headerList"></header-module>
-    <!-- <home-swiper :swiperList="swiperList"></home-swiper> -->
+    <header-module :headerList="headerList" :swiperList="swiperList" @swiper="handleSwiper"></header-module>
     <!-- 课程模块 -->
     <div class="course-container">
       <div  class="course-box"  v-for="(items,index) in courseList" :key="index">
@@ -22,9 +23,7 @@
       </div>
     </div>
     <!-- 精彩手记及猿问 -->
-    <div class="article-container">
-      <article-module :articleList="articleList"></article-module>
-    </div>
+    <article-module :articleList="articleList"></article-module>
     <!-- 慕课精英名师 -->
     <teacher-module :teacherList="teacherList"></teacher-module>
     <!-- 全明星模块 -->
@@ -68,17 +67,24 @@ export default {
       allstarList: [],//全明星数据
       articleList:[],//精彩讲师及猿问
       swiperList:[],//头部轮播数据
-      teacherList:[]//慕课精英名师
+      teacherList:[],//慕课精英名师
+      currentSwiper:'' //当前轮播图片
     };
   },
   mounted() {
     this.getHomeNavData();
+    this.getHomeSliderData();
     this.getHomeCourseData();
     this.getHomeArticleData();
     this.getHomeTeacherData();
     this.getHomeAllstarData();
   },
   methods: {
+    // 获取子组件header传递的背景图片
+    handleSwiper(img){
+      // console.log(img)
+      this.currentSwiper=img
+    },
     // 两种请求方式
     // 获取首页导航信息
     async getHomeNavData() {
@@ -87,6 +93,15 @@ export default {
         console.log(data);
         this.headerList=data;
       }
+    },
+    // 获取首页轮播数据
+    getHomeSliderData() {
+      getHomeSlider().then(res => {
+        let { code, data } = res;
+        if (code === ERR_OK) {
+          this.swiperList=data;
+        }
+      });
     },
     // 获取首页课程信息
     getHomeCourseData() {
@@ -125,8 +140,15 @@ export default {
       });
     },
     // 课程banner背景样式
-    getStyle(item) {  return `url(${item.url}) no-repeat center center` },
-    
+    getStyle(item) {  return `url(${item.url}) no-repeat center center` },    
+  },
+  computed:{   
+    // 头部背景
+    getBackgroundImage() {
+      return {
+        'background-image':`url(${this.currentSwiper})`
+      }
+    },
   }
 };
 </script>
@@ -135,7 +157,16 @@ export default {
 .home-container 
   display: block;
   padding: 0;
+  padding-top: 72px;
   background-color: #f8fafc !important;
+  .bg-mask
+    position: absolute;
+    top: 0;
+    background-size: cover;
+    width: 100%;
+    height: 180px;
+    opacity: 0.3;
+    filter: blur(100px);
   .course-container 
     display: block; 
     .course-box 
