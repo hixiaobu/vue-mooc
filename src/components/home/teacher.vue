@@ -12,12 +12,6 @@
               <p class="label">{{item.label}}</p>
               <p class="introduction">{{item.introduction}}</p>
             </div>
-            <!-- <div class="swiper-item">
-              <img class="headimg" :src="item.avatar" alt="">
-              <p class="name">{{item.name}}</p>
-              <p class="label">{{item.label}}</p>
-              <p class="introduction">{{item.introduction}}</p>
-            </div> -->
           </swiper-slide>
           <!-- Optional controls -->
           <div class="swiper-pagination" slot="pagination"></div>
@@ -46,12 +40,6 @@ export default {
   data () {
     return {
       swiperOption: {
-        // slidesPerView: 5,
-        // spaceBetween: 18,
-        // slidesPerGroup: 2,
-        loop: true,
-        autoplay:true,
-        // loopFillGroupWithBlank: true,
         pagination: {
           el: '.swiper-pagination',
           clickable: true,
@@ -60,6 +48,8 @@ export default {
           nextEl: '.swiper-button-next',
           prevEl: '.swiper-button-prev',
         },
+        loop: true,
+        autoplay:true,
       }
     }
   },
@@ -157,12 +147,14 @@ export default {
                 box-shadow: 0 8px 16px 0 rgba(7, 17, 27, 0.2);
                 .headimg
                   transform-origin: top;
-                  transform: scale(0.6);
+                  width: 60px;
+                  height: 60px;
+                  // transform: scale(0.6);
                 .name,.label
-                  opacity: 0;
+                  display: none;
                 .introduction
+                  // margin-top: -20px;
                   height: 168px;
-                  top: -92px;
                   color: #07111B;
               p
                 display: block;
@@ -170,16 +162,14 @@ export default {
                 color: #4D555D;
                 line-height: 24px;
               .headimg
-                position: absolute;
-                top: -16.6px;
-                left: 50%;
-                margin-left: -48px;
+                margin-top: -20px;
                 width: 96px;
                 height: 96px;
                 border-radius: 50%;
-                transition: transform 0.2s ease-in-out;
+                transition: transform 0.5s ease-in-out;
               .name
-                margin-top: 92px;
+                display: block;
+                margin-top: 12px;
                 padding: 0 36px;
                 font-size: 16px;
                 color: #07111b;
@@ -191,10 +181,9 @@ export default {
                 word-wrap: break-word;
                 overflow: hidden;
               .label
-                margin-bottom: 12px;
+                display: block;
               .introduction
-                position: relative;
-                top: 0;
+                margin-top: 16px;
                 height: 72px;
                 padding: 0 36px;
                 text-overflow: ellipsis;
@@ -206,5 +195,5 @@ export default {
                 text-align: justify;
                 word-break: break-all;
                 font-weight: 400;
-                transition: all 0.2s ease-in-out;
+                transition: all  0.5s liner;
 </style>
