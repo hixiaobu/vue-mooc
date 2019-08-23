@@ -12,7 +12,7 @@
       <div class="header-box">
         <home-swiper :swiperList="swiperList" v-if="swiperList.length" @swiper="getSwiper"></home-swiper>
         <!-- 底部课程 -->
-        <employ-course></employ-course>
+        <recommend-course></recommend-course>
       </div>     
       <!-- menu课程数据 -->
       <div class="submenu" v-show="Object.keys(currentList).length > 0">
@@ -49,13 +49,13 @@
 
 <script>
 import HomeSwiper from './swiper.vue'
-import EmployCourse from './employcourse.vue'
+import RecommendCourse from './recommend.vue'
 export default {
   name:'Header',
   props: ['headerList','swiperList'],
   components: {
     HomeSwiper,
-    EmployCourse
+    RecommendCourse
   },
   data () {
     return {

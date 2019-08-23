@@ -13,7 +13,7 @@ export default {
   },
   created () {
     this.navList = [
-      { title: '课程', url: '' },
+      { title: '免费课程', url: '' },
       { title: '实战课程', url: '' },
       { title: '就业班', url: '' },
       { title: '专栏', url: '' },

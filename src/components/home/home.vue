@@ -5,23 +5,7 @@
     <!-- 头部导航 -->
     <header-module :headerList="headerList" :swiperList="swiperList" @swiper="handleSwiper"></header-module>
     <!-- 课程模块 -->
-    <div class="course-container">
-      <div  class="course-box"  v-for="(items,index) in courseList" :key="index">
-        <div class="course-items">
-          <!-- 课程标题 -->
-          <title-module class="course-title" :title="items.title" :left="items.leftIcon" :right="items.rightIcon"></title-module>
-          <!-- 课程banner -->
-          <div class="course-banner" v-if="items.banner">
-            <div class="banner-item" :style="{background:getStyle(itemb)}"  v-for="(itemb,index) in items.banner" :key="index">
-              <h3 class="banner-title">{{itemb.title}}</h3>
-              <p class="banner-subtitle">{{itemb.subtitle}}</p>
-            </div>
-          </div>
-          <!-- 课程数据 -->
-          <course-module :courseList='items.data'></course-module>
-        </div>
-      </div>
-    </div>
+    <course-module :courseList="courseList"></course-module>
     <!-- 精彩手记及猿问 -->
     <article-module :articleList="articleList"></article-module>
     <!-- 慕课精英名师 -->
@@ -44,7 +28,7 @@ import {
 import { ERR_OK } from "@/api/config.js"
 import TitleModule from './title.vue'
 import HeaderModule from './header.vue'
-import CourseModule from '@/base/course/course.vue'
+import CourseModule from './course.vue'
 import AllstarModule from './allstar.vue'
 import ArticleModule from './article.vue'
 import TeacherModule from './teacher.vue'
@@ -82,7 +66,6 @@ export default {
   methods: {
     // 获取子组件header传递的背景图片
     handleSwiper(img){
-      // console.log(img)
       this.currentSwiper=img
     },
     // 两种请求方式
@@ -90,7 +73,6 @@ export default {
     async getHomeNavData() {
       let { code, data } = await getHomeNav();
       if (code === ERR_OK) {
-        console.log(data);
         this.headerList=data;
       }
     },
@@ -138,9 +120,7 @@ export default {
           this.allstarList=data
         }
       });
-    },
-    // 课程banner背景样式
-    getStyle(item) {  return `url(${item.url}) no-repeat center center` },    
+    } 
   },
   computed:{   
     // 头部背景
@@ -157,7 +137,6 @@ export default {
 .home-container 
   display: block;
   padding: 0;
-  padding-top: 72px;
   background-color: #f8fafc !important;
   .bg-mask
     position: absolute;
@@ -166,45 +145,5 @@ export default {
     width: 100%;
     height: 180px;
     opacity: 0.3;
-    filter: blur(100px);
-  .course-container 
-    display: block; 
-    .course-box 
-      padding: 36px 0 48px;
-      box-shadow: 0 2px 4px 0 rgba(7, 17, 27, 0.06);
-      &:nth-child(2n+1)
-        background-color: #ffffff !important;
-        box-box-shadow: 0 2px 8px 0 rgba(7, 17, 27, 0.06) !important;   
-      .course-items 
-        margin: 0 auto;
-        width: 1152px;
-        .course-title   
-          margin-bottom: 24px; 
-        .course-banner
-          display: flex;
-          align-items:center;
-          justify-content: space-between;
-          margin-bottom: 36px;
-          .banner-item
-            display: block;
-            width: 567px;
-            height: 108px;
-            border-radius: 8px;
-            overflow: hidden;
-            padding: 30px 0;
-            box-sizing: border-box;
-            text-align: center;
-            .banner-title
-              font-size: 20px;
-              font-weight: 700;
-              color: #FFFFFF;
-              letter-spacing: 2px;
-              line-height: 28px;
-              text-shadow: 0 2px 2px rgba(7, 17, 27, 0.4);
-            .banner-subtitle
-              margin-top: 4px;
-              font-size: 12px;
-              color: #FFFFFF;
-              line-height: 16px;
-              text-shadow: 0 2px 2px rgba(7, 17, 27, 0.4);  
+    filter: blur(100px); 
 </style>

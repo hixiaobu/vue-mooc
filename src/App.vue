@@ -1,7 +1,9 @@
 <template>
   <div id="app">
     <my-header></my-header>
-    <router-view/>
+    <div class="main">
+      <router-view/>
+    </div>
     <my-footer></my-footer>
     <side-bar></side-bar>
   </div>
@@ -18,3 +20,9 @@ export default {
   }
 }
 </script>
+<style lang="stylus" scoped>
+  .main
+    display: block;
+    padding: 0;
+    padding-top 72px;
+</style>
