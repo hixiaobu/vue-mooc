@@ -6,8 +6,11 @@
         <div class="top-logo"><img src="https://www.imooc.com/static/img/course/logo-course.png" alt=""></div>
         <div class="top-banner"><img src="https://www.imooc.com/static/img/course/course-top.png" alt=""></div>
         <div class="search-box">
-          <input type="text" placeholder="搜索感兴趣的内容" autocomplete="off">
+          <input type="text" placeholder="搜索感兴趣的内容" autocomplete="off" @focus="getFocus" @blur="getBlur">
           <i class="iconfont icon-sousuo"></i>
+          <ul v-if="isShow">
+            <li v-for="item in searchList" :key="item.id">{{item.title}}</li>
+          </ul>
         </div>
       </div>
       <div class="classify-box" v-if="classifyList && classifyList.length>0">
@@ -19,6 +22,11 @@
         </div>
       </div>
     </div>
+    <!-- 课程工具栏 -->
+    <div class="tool-bar">
+      <span class="change-btn" :class="{active:checkbar==='最新'}" @click="handleBarClick('最新')">最新</span>
+      <span class="change-btn" :class="{active:checkbar==='最热'}" @click="handleBarClick('最热')">最热</span>
+    </div>
     <!-- 课程列表 -->
     <div class="course-box">
       <course-module :courseList="courseList"></course-module>
@@ -29,6 +37,7 @@
 import { getCourseNav,getCourseList } from '@/api/course.js'
 import { ERR_OK } from '@/api/config.js'
 import CourseModule from '@/base/course/course.vue'
+import { constants } from 'crypto';
 export default {
   name:'FreeCourse',
   components:{
@@ -41,8 +50,20 @@ export default {
       directionindex:0,
       categoryindex:0,
       difficultindex:0,
-      courseList:[] //课程数据
+      courseList:[], //课程数据
+      checkbar:"最新",//工具栏
+      searchList:[],//搜索历史列表
+      isShow:false
     }
+  },
+  created () {
+    this.searchList=[
+      { id:0,title:"webpack"},
+      { id:1,title:"todolist"},
+      { id:2,title:"canvas"},
+      { id:3,title:"去哪儿"},
+      { id:4,title:"flutter"}
+    ]
   },
   mounted (){
     this.getCourseNavData();
@@ -67,7 +88,10 @@ export default {
         let { code, data }=res
         if(code==ERR_OK){
           this.courseList=data
-          console.log(data)
+          // 最热数据
+          if(this.checkbar==="最热"){
+            this.courseList.sort(this.sortNumber)
+          }
         }
       })
     },
@@ -77,11 +101,17 @@ export default {
       let templist= Object.assign({}, this.oldClassifyList[1])   
       let category=[]
       templist.data.forEach((items,indexs) => {
-        if(index==0 || index==indexs){
+        if(index==0){
           items.data.forEach(item => {
             category.push(item)
           })
-        }   
+        } 
+        else if(index==indexs){
+          category.push("全部")
+          items.data.forEach(item => {
+            category.push(item)
+          })
+        }  
       });
       templist.data=category
       this.classifyList[1]=templist
@@ -98,8 +128,25 @@ export default {
       else{
         this.difficultindex=index
       }
+    },
+    // 课程工具栏点击
+    handleBarClick(type){
+      this.checkbar=type
+      this.getCourseListData()
+    },
+    // 最热数据排序
+    sortNumber(a,b)
+    {
+      return b.number - a.number
+    },
+    // input获取焦点
+    getFocus(){
+      this.isShow=true
+    },
+    // input失去焦点
+    getBlur(){
+      this.isShow=false
     }
-    
   }
 }
 </script>
@@ -129,6 +176,7 @@ export default {
             width: 100%;
             height: 100%;
         .search-box
+          position: relative;
           margin-top: 12px;
           float: right;
           height: 36px;
@@ -154,6 +202,31 @@ export default {
             color: #9199a1;
             text-align: right;
             cursor: pointer;
+          ul
+            position: absolute;
+            left: 0;
+            top: 40px;
+            width: 100%;
+            margin-bottom: 20px;
+            border-top: none;
+            background-color: #fff;
+            box-shadow: 0 8px 16px 0 rgba(7,17,27,.2);
+            font-size: 12px;
+            z-index: 800;
+            border-bottom-right-radius: 8px;
+            border-bottom-left-radius: 8px;
+            li
+              width: 100%;
+              height: 45px;
+              line-height: 45px;
+              padding: 0 16px;
+              box-sizing: border-box;
+              cursor: pointer;
+              color: #4d555d;
+              font-size: 14px;
+              &:hover
+                background-color: #f3f5f6;
+                color: #07111b;
       .classify-box  
         margin: 0 auto;
         max-width: 1386px;
@@ -200,8 +273,31 @@ export default {
                 border-radius: 6px;
                 font-weight: 700;
                 color: #f20d0d;
+    .tool-bar
+      position: relative;
+      margin: 0 auto;
+      padding-top: 26px;
+      padding-bottom: 16px;
+      overflow: hidden;     
+      width: 1386px;
+      height: 14px !important;
+      font-size: 12px;
+      .change-btn
+        margin-right: 12px;
+        padding: 4px 12px;
+        font-size: 12px;
+        color: #545c63;
+        line-height: 16px;
+        background: #fff;
+        border-radius: 12px;
+        cursor: pointer;
+        background: #f3f5f7;
+        &.active
+          color: #FFFFFF;
+          background: #9199a1;
+          cursor: default;
     .course-box
       margin: 0 auto;
-      width: 1386px
+      width: 1386px;
 
 </style>

@@ -26,7 +26,7 @@
                     <div class="course-card-desc" v-if="showItem(item.desc)">{{item.desc}}</div>
                     <div class="course-card-price">
                         <span>{{item.price==0?"免费":"¥ "+item.price}}</span>
-                        <div class="course-card-like"  :style="getIsLikeColor(item.isLike)">
+                        <div class="course-card-like"  :style="getIsLikeColor(item.isLike)" v-if="item.isLike!=null">
                             <i class="iconfont icon-shoucang"></i>
                             <span>{{item.isLike?"已收藏":"收藏"}}</span>
                         </div>
