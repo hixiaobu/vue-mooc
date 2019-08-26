@@ -10,12 +10,12 @@
                 </div>
             </div>
             <div class="course-card">
-                <h3 class="course-card-name">{{item.name}}</h3>
+                <h3 class="course-card-name">{{item.name||item.title}}</h3>
                 <div class="course-card-bottom">
                     <div class="course-card-info">
-                        <span>{{item.type}}</span>
-                        <span>{{item.rank}}</span>
-                        <span>
+                        <span v-if="showItem(item.type)">{{item.type}}</span>
+                        <span v-if="showItem(item.rank)">{{item.rank}}</span>
+                        <span v-if="showItem(item.number)">
                             <i class="iconfont icon-ren"></i>
                             {{item.number}}
                         </span>
@@ -23,7 +23,15 @@
                             <course-star :score="item.star" v-if="item.star"></course-star>
                         </span>
                     </div>
-                    <div class="course-card-price">{{item.price==0?"免费":"¥ "+item.price}}</div>
+                    <div class="course-card-desc" v-if="showItem(item.desc)">{{item.desc}}</div>
+                    <div class="course-card-price">
+                        <span>{{item.price==0?"免费":"¥ "+item.price}}</span>
+                        <div class="course-card-like"  :style="getIsLikeColor(item.isLike)">
+                            <i class="iconfont icon-shoucang"></i>
+                            <span>{{item.isLike?"已收藏":"收藏"}}</span>
+                        </div>
+                    </div>
+                    
                 </div>
             </div>
         </div>
@@ -42,6 +50,23 @@ export default {
         CourseRate,
         CourseStar
   },
+  methods:{
+    //是否显示
+    showItem(value){
+        if(value==null){
+            return false
+        }
+        return true
+    },
+    // 获取收藏颜色
+    getIsLikeColor(islike){
+        if(islike){
+            return {
+                'color':'rgba(240, 20, 20, 0.6)'
+            }
+        }
+    }
+  }
 }
 </script>
 
@@ -56,7 +81,6 @@ export default {
         position: relative;
         margin-bottom: 12px;
         width: 216px;
-        height: 252px;
         border-radius: 4px;
         cursor: pointer;
         &:hover 
@@ -128,19 +152,53 @@ export default {
                 -webkit-box-orient: vertical;
             .course-card-bottom 
                 .course-card-info 
-                    display: flex;
-                    justify-content: space-between;
+                    // display: flex;
+                    // justify-content: space-between;
                     margin-top: 8px;
                     font-size: 12px;
                     color: #93999F;
                     line-height: 24px;
                     font-weight: 400;
-                    span                 
+                    span  
+                        margin-right: 11px;
+                        &:nth-last-child(1)
+                            margin-right: 0;
                         .iconfont 
                             font-size: 12px;
                             color: #93999F;
-                .course-card-price 
+                .course-card-desc
+                    margin-top: 4px;
+                    margin-bottom: 4px;
                     font-size: 12px;
-                    font-weight: bold;
-                    color: #4D555D; 
+                    font-weight: 300;
+                    color: #9199a1;
+                    height: 36px;
+                    line-height: 18px;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    display: -webkit-box;
+                    -webkit-line-clamp: 2;
+                    -webkit-box-orient: vertical;
+                .course-card-price 
+                    line-height: 24px;
+                    font-size: 12px;
+                    color: #4d555d;
+                    span 
+                        font-weight: 700;
+                        // display: inline-block;
+                        // vertical-align: unset;
+                    .course-card-like
+                        // display: inline-block;
+                        float: right;
+                        color: #b7bbbf;
+                        &:hover 
+                            color: #4d555d !important;
+                        .iconfont
+                            float: left;
+                            font-size: 16px;
+                        span 
+                            float: left;
+                            font-size: 12px;
+                            margin-left: 2px;
+                            font-weight: 700;
 </style>

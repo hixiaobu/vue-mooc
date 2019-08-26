@@ -11,32 +11,42 @@
         </div>
       </div>
       <div class="classify-box" v-if="classifyList && classifyList.length>0">
-        <!-- 方向 -->
         <div class="nav-row" v-for="(items,index) in classifyList" :key="index">
           <span>{{items.type}}：</span>
           <ul>
-            <li v-for="(item,index) in items.data" :key="index">{{item}}</li>
+            <li v-for="(item,index) in items.data" :key="index" :class="{active: index===(items.type=='方向'?directionindex:(items.type=='分类'?categoryindex:difficultindex))}" @click="handleNavClick(items.type,index)">{{item}}</li>
           </ul>
         </div>
       </div>
+    </div>
+    <!-- 课程列表 -->
+    <div class="course-box">
+      <course-module :courseList="courseList"></course-module>
     </div>
   </div>
 </template>
 <script>
 import { getCourseNav,getCourseList } from '@/api/course.js'
 import { ERR_OK } from '@/api/config.js'
+import CourseModule from '@/base/course/course.vue'
 export default {
   name:'FreeCourse',
+  components:{
+    CourseModule
+  },
   data () {
     return {
-      classifyList:[],//头部分类数据
-      directioncode:"全部",
-      categorycode:"全部",
-      difficultcode:"全部"
+      oldClassifyList:[],//接口获取数据
+      classifyList:[],//头部分类数据(组合)
+      directionindex:0,
+      categoryindex:0,
+      difficultindex:0,
+      courseList:[] //课程数据
     }
   },
   mounted (){
     this.getCourseNavData();
+    this.getCourseListData();
   },
   methods:{
     // 获取课程导航
@@ -44,18 +54,30 @@ export default {
       getCourseNav().then(res=>{
         let { code, data }=res
         if(code==ERR_OK){
-          this.classifyList=data
+          this.oldClassifyList=data.slice()
+          this.classifyList= data.slice()
           // 数据处理
-          this.getTypeData(this.directioncode);
+          this.getTypeData(this.directionindex);
         }
       })  
     },
+    // 获取课程列表数据
+    getCourseListData(){
+      getCourseList().then(res=>{
+        let { code, data }=res
+        if(code==ERR_OK){
+          this.courseList=data
+          console.log(data)
+        }
+      })
+    },
     //组合导航数据
-    getTypeData(type){
-      let templist=this.classifyList[1]
+    getTypeData(index){
+      //浅拷贝 
+      let templist= Object.assign({}, this.oldClassifyList[1])   
       let category=[]
-      templist.data.forEach(items => {
-        if(type=="全部" || type==items.direction){
+      templist.data.forEach((items,indexs) => {
+        if(index==0 || index==indexs){
           items.data.forEach(item => {
             category.push(item)
           })
@@ -64,11 +86,26 @@ export default {
       templist.data=category
       this.classifyList[1]=templist
     },
+    // 导航点击
+    handleNavClick(type,index){
+      if(type=="方向"){
+        this.directionindex=index
+        this.getTypeData(index)
+      }
+      else if(type=="分类"){
+        this.categoryindex=index
+      }
+      else{
+        this.difficultindex=index
+      }
+    }
+    
   }
 }
 </script>
 <style lang="stylus" scoped>
   .course-container
+    background-color: #f3f5f7;
     display: block;
     .header-box
       padding-bottom: 12px;
@@ -121,11 +158,24 @@ export default {
         margin: 0 auto;
         max-width: 1386px;
         .nav-row
+          position: relative;
           padding: 16px 0 5px;
           border-bottom: 1px solid #edf1f2;
           &:nth-child(2) ul
             max-height: 132px;
             overflow: hidden;
+            z-index: 1;
+          &:hover:nth-child(2)
+            top: -1px;
+            margin: 0 -10px;
+            padding: 16px 9px;
+            background: #fff;
+            border: 1px solid rgba(28,31,33,.1);
+            box-shadow: 0 8px 16px 0 rgba(28,31,33,.2);
+            border-radius: 8px;
+            ul
+              max-height: unset;
+              overflow: auto;
           span 
             width: 52px;
             line-height: 30px;
@@ -145,11 +195,13 @@ export default {
               font-size: 14px;
               &:hover
                 color: #ec1500;
-              &:active
+              &.active
                 background: rgba(242,13,13,.06);
                 border-radius: 6px;
                 font-weight: 700;
                 color: #f20d0d;
-
+    .course-box
+      margin: 0 auto;
+      width: 1386px
 
 </style>
