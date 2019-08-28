@@ -2,6 +2,7 @@
   <div class="header-box">
     <div class="logo"><img src="https://www.imooc.com/static/img/index/logo.png" alt=""></div>
     <header-nav></header-nav>
+    <header-search></header-search>
     <header-login></header-login>
   </div>
 </template>
@@ -9,10 +10,12 @@
 <script>
 import HeaderNav from './header-nav'
 import HeaderLogin from './header-login'
+import HeaderSearch from './header-search'
 export default {
   components:{
     HeaderNav,
-    HeaderLogin
+    HeaderLogin,
+    HeaderSearch
   }
 }
 </script>

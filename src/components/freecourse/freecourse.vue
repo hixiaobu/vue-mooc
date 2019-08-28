@@ -9,7 +9,7 @@
           <input type="text" placeholder="搜索感兴趣的内容" autocomplete="off" @focus="getFocus" @blur="getBlur">
           <i class="iconfont icon-sousuo"></i>
           <ul v-if="isShow">
-            <li v-for="item in searchList" :key="item.id">{{item.title}}</li>
+            <li v-for="(item,index) in CommonSearchList" :key="index">{{item}}</li>
           </ul>
         </div>
       </div>
@@ -35,9 +35,9 @@
 </template>
 <script>
 import { getCourseNav,getCourseList } from '@/api/course.js'
+import { getCommonSearch } from '@/api/common.js'
 import { ERR_OK } from '@/api/config.js'
 import CourseModule from '@/base/course/course.vue'
-import { constants } from 'crypto';
 export default {
   name:'FreeCourse',
   components:{
@@ -52,22 +52,14 @@ export default {
       difficultindex:0,
       courseList:[], //课程数据
       checkbar:"最新",//工具栏
-      searchList:[],//搜索历史列表
+      CommonSearchList:[],//搜索历史
       isShow:false
     }
-  },
-  created () {
-    this.searchList=[
-      { id:0,title:"webpack"},
-      { id:1,title:"todolist"},
-      { id:2,title:"canvas"},
-      { id:3,title:"去哪儿"},
-      { id:4,title:"flutter"}
-    ]
   },
   mounted (){
     this.getCourseNavData();
     this.getCourseListData();
+    this.getCommonSearchData();
   },
   methods:{
     // 获取课程导航
@@ -115,6 +107,15 @@ export default {
       });
       templist.data=category
       this.classifyList[1]=templist
+    },
+    // 历史搜索数据
+    getCommonSearchData(){
+      getCommonSearch().then(res=>{
+        let { code, data }=res
+        if(code===ERR_OK){
+          this.CommonSearchList=data
+        }
+      })
     },
     // 导航点击
     handleNavClick(type,index){
