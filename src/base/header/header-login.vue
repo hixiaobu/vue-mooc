@@ -31,19 +31,33 @@
     </ul>
     <!-- 遮罩 -->
     <common-mask v-if="isShowMask"></common-mask>
+    <!-- 登录、注册 -->
+    <login-register v-if="isShowMask"></login-register>
   </div>
 </template>
 <script>
 import CommonMask from '@/base/common/mask.vue'
+import LoginRegister from '@/base/loginregister/loginregister.vue'
 export default {
   name:'HeaderLogin',
   data () {
     return {
-      isShowMask: false
+      isShowMask: true
     }
   },
   components:{
-    CommonMask
+    CommonMask,
+    LoginRegister
+  },
+  methods:{
+    // 登录
+    handleLogin(){
+      console.log(123)
+    },
+    // 注册
+    handleRegister(){
+      console.log(123)
+    }
   }
 }
 </script>
