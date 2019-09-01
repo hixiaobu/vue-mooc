@@ -32,9 +32,11 @@
     <div class="footer-box">
       <div class="pop-login">
         <span class="showphonesignin">手机短信登录</span>
-        <span class="icons"><i class="iconfont icon-weibo"></i></span>
-        <span class="icons"><i class="iconfont icon-weixin"></i></span>
-        <span class="icons"><i class="iconfont icon-QQ"></i></span>
+        <p>
+          <span class="icons"><i class="iconfont icon-weibo"></i></span>
+          <span class="icons"><i class="iconfont icon-weixin"></i></span>
+          <span class="icons"><i class="iconfont icon-QQ"></i></span>
+        </p>
       </div>
       <div class="showqrcode"></div>
     </div>
@@ -183,6 +185,8 @@ export default {
     .pop-login
       text-align: center;
       font-size: 14px;
+      & > p
+        display: inline-block;
       .showphonesignin
         margin-left: 30px;
         margin-right: 24px;
