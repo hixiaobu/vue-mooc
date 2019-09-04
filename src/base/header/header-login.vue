@@ -32,7 +32,7 @@
     <!-- 遮罩 -->
     <common-mask v-if="isShowMask"></common-mask>
     <!-- 登录、注册 -->
-    <login-register v-if="isShowMask"></login-register>
+    <login-register v-if="isShowMask" :ftype="type" @close="handleClose"></login-register>
   </div>
 </template>
 <script>
@@ -42,7 +42,8 @@ export default {
   name:'HeaderLogin',
   data () {
     return {
-      isShowMask: true
+      isShowMask: false,
+      type:""
     }
   },
   components:{
@@ -52,11 +53,17 @@ export default {
   methods:{
     // 登录
     handleLogin(){
-      console.log(123)
+      this.isShowMask=true;
+      this.type="signin";
     },
     // 注册
     handleRegister(){
-      console.log(123)
+      this.isShowMask=true;
+      this.type="signup";
+    },
+    // 关闭
+    handleClose(){
+      this.isShowMask=false;
     }
   }
 }

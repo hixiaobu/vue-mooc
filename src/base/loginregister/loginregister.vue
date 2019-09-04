@@ -4,55 +4,122 @@
     <div class="header-box">
       <span class="sign-title" :class="{active:type==='signin'}" @click="handleChangeSign('signin')">登录</span>
       <span class="sign-title" :class="{active:type==='signup'}" @click="handleChangeSign('signup')">注册</span>
-      <span class="closebtn"></span>
+      <span class="closebtn" @click="handleClose"></span>
     </div>
-    <!-- login -->
-    <div class="login-wrap">
-      <div class="oneline">
-        <input type="text" maxlength="37" placeholder="请输入登录手机号/邮箱">
-        <p class="prompt">请输入正确的邮箱或手机号</p>
+    <!-- 登录 -->
+    <template  v-if="type=='signin'">
+      <template v-if="!showqrcode">
+        <!-- login -->
+        <div class="login-wrap">
+          <div class="oneline">
+            <input type="text" maxlength="37" placeholder="请输入登录手机号/邮箱">
+            <p class="prompt">请输入正确的邮箱或手机号</p>
+          </div>
+          <div class="oneline">
+            <i class="iconfont icon-yanjingyincang yincang"></i>
+            <input type="password" maxlength="16" placeholder="请输入密码">
+            <p class="prompt">请输入6-16位密码,区分大小写,不能用空格</p>
+          </div>
+          <div class="control-box">
+            <span>
+              <input type="checkbox" checked class="auto-cbx">7天内自动登录
+            </span>
+            <span class="right">无法登录</span>
+            <span class="line"></span>
+            <span class="right">找回密码</span>
+          </div>
+          <p class="prompt"></p>
+          <input type="button" value="登录" class="btn-sign">
+        </div>
+        <!-- footer -->
+        <div class="footer-box">
+          <div class="pop-login">
+            <span class="showphonesignin">手机短信登录</span>
+            <p>
+              <span class="icons"><i class="iconfont icon-weibo"></i></span>
+              <span class="icons"><i class="iconfont icon-weixin"></i></span>
+              <span class="icons"><i class="iconfont icon-QQ"></i></span>
+            </p>
+          </div>
+          <div class="showqrcode" @click="showQRCode('qrcode')"></div>
+        </div>
+      </template>
+      <template v-if="showqrcode">
+        <div class="qrcode">
+          <img src="https://www.imooc.com/static/img/common/appload.png" alt="">
+        </div>
+        <p class="qrcode_title">扫描二维码登录慕课网</p>
+        <p class="qrcode_mark">请使用新版<a>慕课网手机APP</a> 扫码完成登录</p>
+        <div class="footer">
+          <div class="pclogin" @click="showQRCode('pclogin')"></div>
+        </div>
+      </template>
+    </template>
+    <!-- 注册 -->
+    <template v-if="type=='signup'">
+      <div class="login-wrap">
+        <div class="oneline">
+          <input type="text" maxlength="37" placeholder="请输入注册手机号">
+          <p class="prompt">请输入正确手机号</p>
+        </div>
+        <div class="oneline">
+          <i class="iconfont icon-shuaxin-copy shuaxin"></i>
+          <input type="text" maxlength="16" placeholder="验证码">
+          <p class="prompt">验证码错误</p>
+        </div>
+        <div class="control-box">
+          <span>
+            <input type="checkbox" class="auto-cbx">同意<a class="agreement">《慕课网注册协议》</a>
+          </span>
+        </div>
+        <p class="prompt"></p>
+        <input type="button" value="注册" class="btn-sign">
       </div>
-      <div class="oneline">
-        <i class="iconfont icon-yanjingyincang"></i>
-        <input type="password" maxlength="16" placeholder="请输入密码">
-        <p class="prompt">请输入6-16位密码,区分大小写,不能用空格</p>
+      <!-- footer -->
+      <div class="footer-box">
+        <div class="pop-login">
+          <span class="showothersignin">其它方式登录：</span>
+          <p class="right">
+            <span class="icons"><i class="iconfont icon-weibo"></i></span>
+            <span class="icons"><i class="iconfont icon-weixin"></i></span>
+            <span class="icons"><i class="iconfont icon-QQ"></i></span>
+          </p>
+        </div>
       </div>
-      <div class="control-box">
-        <span>
-          <input type="checkbox" checked class="auto-cbx">7天内自动登录
-        </span>
-        <span class="right">无法登录</span>
-        <span class="line"></span>
-        <span class="right">找回密码</span>
-      </div>
-      <p class="prompt"></p>
-      <input type="button" value="登录" class="btn-sign">
-    </div>
-    <!-- footer -->
-    <div class="footer-box">
-      <div class="pop-login">
-        <span class="showphonesignin">手机短信登录</span>
-        <p>
-          <span class="icons"><i class="iconfont icon-weibo"></i></span>
-          <span class="icons"><i class="iconfont icon-weixin"></i></span>
-          <span class="icons"><i class="iconfont icon-QQ"></i></span>
-        </p>
-      </div>
-      <div class="showqrcode"></div>
-    </div>
+    </template>    
   </div>
 </template>
 <script>
 export default {
   name: 'LoginRegister',
+  props:{
+    ftype:String
+  },
   data () {
     return {
-      type:"signin"
+      type:"",
+      showqrcode:false
     }
   },
+  created(){
+    this.type=this.ftype
+  },
   methods:{
+    // 登录注册切换
     handleChangeSign (type) {
       this.type=type
+    },
+    // 二维码登录
+    showQRCode (type) {
+      if(type==="qrcode"){
+        this.showqrcode=true
+      }else if(type==="pclogin"){
+        this.showqrcode=false
+      }
+    },
+    // 关闭
+    handleClose () {
+      this.$emit('close','')
     }
   }
 }
@@ -113,6 +180,39 @@ export default {
       height: 17px;
       cursor: pointer;
       background: url('https://www.imooc.com/static/img/nlogin.png') no-repeat 0 0;
+  .qrcode
+    position: relative;
+    margin: 10px 80px 30px;
+    img
+      display: block;
+      margin: 0 auto;
+      width: 160px;
+      height: 160px;
+  .qrcode_title
+    font-size: 16px;
+    color: #717a84;
+    font-weight: 700;
+    text-align: center;
+    line-height: 24px;
+  .qrcode_mark
+    color: #717a84;
+    font-size: 12px;
+    text-align: center;
+    line-height: 20px;
+    a
+      color: #EF1300;
+      cursor: pointer;
+  .footer
+    padding: 20px 30px 4px;
+    .pclogin
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 60px;
+      height: 60px;
+      background: url('https://www.imooc.com/static/img/pcLogin.png') no-repeat 0 0;    
+      cursor: pointer;
+      border-radius: 0 0 12px 0;
   .login-wrap
     padding: 0 32px;
     .oneline
@@ -139,6 +239,17 @@ export default {
         right: 14px;
         font-size: 23px;
         color: #b5b9bc;
+      .yincang
+        top: 10px;
+        font-size: 28px;
+        &:hover
+          color: #717a84;
+      .shuaxin
+        top:14px;
+        font-size: 20px;
+        &:hover
+          color: #787d82;
+          transform: rotate(360deg);
     .control-box
       position: relative;
       color: #9199a1;
@@ -146,6 +257,11 @@ export default {
         .auto-cbx
           margin-right: 10px;
           vertical-align: middle;
+        .agreement
+          color: #37f;
+          cursor: pointer;
+          &:hover
+            color: #04c;
       .right
         float: right;
         cursor: pointer;
@@ -215,6 +331,11 @@ export default {
           font-size: 24px;
           vertical-align: -3px;
           color: #b5b9bc;
+      .showothersignin
+        float: left;
+        color: #9199a1;
+      .right
+        float: right;
     .showqrcode
       position: absolute;
       bottom: 0;
