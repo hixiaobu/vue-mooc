@@ -33,13 +33,30 @@
           <li class="nav-item" :class="{active:navindex===index}" v-for="(item,index) in LessonNav[0].data" :key="index" @click="handleChangeNav(index,item)">{{item}}</li>
         </ul>
       </div>
-      <div class="skill-box">
-        <div  class="skill-wrap">
+      <div class="skill-box" :class="{boxhover:skillhover}">
+        <div  class="skill-wrap" :class="{skillhover:skillhover}" @mouseenter="handleMouseEnter($event)" @mouseleave="handleMouseLeave">
           <ul>
             <li class="skill-item" :class="{active:categoryindex===index}" v-for="(item,index) in categoryList" :key="index">{{item}}</li>
           </ul>
         </div>
         
+      </div>
+    </div>
+    <!-- 课程列表 -->
+    <div class="course-box">
+      <!-- screening-box -->
+      <div class="screening-box">
+        <ul>
+          <li :class="{active:coursetoolindex===index}" v-for="(item,index) in toolList" :key="index">{{item}}</li>
+        </ul>
+        <span>课程上新预告</span>
+      </div>
+      <!-- 课程模块 -->
+      <course-module :courseList="LessonList"></course-module>     
+      <!-- footer-course -->
+      <div class="footer-box">
+        <span class="footer-item python" title="python"></span>
+        <span class="footer-item vue" title="vue"></span>
       </div>
     </div>
   </div>
@@ -48,8 +65,12 @@
 import { getCommonHot, getCommonSearch } from '@/api/common.js'
 import { ERR_OK } from "@/api/config.js"
 import { getLessonNav, getLessonList } from '@/api/course.js'
+import CourseModule from '@/base/course/course.vue'
 export default {
   name:'PracticeCourse',
+  components:{
+    CourseModule
+  },
   data () {
     return {
       CommonHotList:[],//热门数据
@@ -59,8 +80,14 @@ export default {
       isShow:false,//搜索历史数据
       navindex:0,//导航选中项
       categoryList:[],//分类数据
-      categoryindex:0
+      categoryindex:0,//分类索引
+      toolList:[],//课程工具栏
+      coursetoolindex:0,//课程工具栏索引
+      skillhover:false
     }
+  },
+  created(){
+    this.toolList=["默认排序","最新","销量","升级"]
   },
   mounted(){
     this.getCommonHotData()
@@ -97,7 +124,7 @@ export default {
         }
       })
     },
-    // 获取实战课程列表
+    // 获取实战课程列表 
     getLessonListData(){
       getLessonList().then(res=>{
         let { code, data }=res
@@ -134,6 +161,17 @@ export default {
         }
       })
       console.log(this.categoryList)
+    },
+    // 技能 鼠标移入事件
+    handleMouseEnter($event){
+      if(this.categoryindex==0){
+        console.log($event)
+        this.skillhover=true
+      }
+    },
+    // 鼠标离开事件
+    handleMouseLeave(){
+      this.skillhover=false
     }
   }
 }
@@ -283,17 +321,22 @@ export default {
               margin-left: -8px;
     .skill-box
       position: relative;
-      padding: 24px 0 22px;
+      padding: 24px 0 10px;
       width:100%;
+    .boxhover
+      &:hover
+        height: 132px;
       .skill-wrap
         display: block;
         width: 100%;
         max-height: 132px;
         overflow: hidden;
         background: #f8fafc;
+      .skillhover
         &:hover
-          max-height: 274px;
           position: absolute;
+          max-height: 274px;
+          height: 274px;
           z-index: 5;
           box-shadow: rgba(28,31,33,0.2) 0px 16px 16px 0px;
         ul
@@ -301,17 +344,82 @@ export default {
           width: 1152px;
           max-height: 132px;
           .skill-item
-            // float: left;
             display: inline-block;
             margin-right: 20px;
+            margin-bottom: 12px;
             padding: 0 12px;
             font-size: 14px;
             color: #4d555d;
             line-height: 32px;
             border-radius: 6px;
+            cursor: pointer;
+            &:hover
+              background: #d9dde1;
             &:nth-last-child(1)
               margin-right: 0;
             &.active
               color: #c80;
               background: rgba(204,136,0,.1);
+  .course-box
+    position: relative;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 1152px;
+    padding-bottom: 70px;
+    border-top: 1px solid #d9dde1;
+    .screening-box
+      position: relative;
+      padding: 20px 12px;
+      width: 100%;
+      box-sizing: border-box;
+      ul
+        display: inline-block;
+        li
+          display: inline-block;
+          margin-right: 12px;
+          padding: 4px 12px;
+          font-size: 12px;
+          line-height: 16px;
+          color: #4d555d;
+          height: 16px;
+          border-radius: 12px;
+          cursor: pointer;
+          &:nth-last-child(1)
+            margin-right: 0;
+          &:hover
+            color: #07111b;
+          &.active
+            background: #545c63;
+            color: #fff;
+      span 
+        float: right;
+        display: inline-block;
+        padding: 0 12px;
+        background: rgba(204,136,0,.1);
+        border-radius: 12px;
+        font-size: 12px;
+        color: #c80;
+        text-align: left;
+        line-height: 24px;
+        cursor: pointer;
+    .footer-box
+      position: relative;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      width: 1152px;
+      box-sizing: border-box;
+      margin-top: 48px;
+      .footer-item
+        display: block;
+        width: 567px;
+        height: 108px;
+        border-radius: 8px;
+        background-size: cover;
+        box-shadow: 0 8px 16px rgba(7,17,27,.1);
+        cursor: pointer;
+      .python
+        background-image: url('https://img.mukewang.com/5b86030f0001db9e05900120.jpg');
+      .vue
+        background-image: url('https://img1.mukewang.com/5b568bc40001b45905900120.jpg');
 </style>
