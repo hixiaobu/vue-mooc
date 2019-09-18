@@ -1,22 +1,26 @@
 import axios from '@/utils/axios.js'
+import { isLocalMock } from '@/api/config.js'
 
 // 获取免费课程导航
 export function getCourseNav(){
-  return axios.get('/course/nav')
+  let url = isLocalMock ? '/mock/course/nav.json' : '/course/nav'
+  return axios.get(url)
 }
 
 // 获取免费课程列表
 export function getCourseList(){
-  return axios.post('/course/list')
+  let url = isLocalMock ? '/mock/course/list.json' : '/course/list'
+  return axios.get(url)
 }
-
 
 // 获取实战课程导航
 export function getLessonNav(){
-  return axios.get('/lesson/nav')
+  let url = isLocalMock ? '/mock/lesson/nav.json' : '/lesson/nav'
+  return axios.get(url)
 }
 
 // 获取实战课程列表
 export function getLessonList(){
-  return axios.post('/lesson/list')
+  let url = isLocalMock ? '/mock/lesson/list.json' : '/lesson/list'
+  return axios.get(url)
 }

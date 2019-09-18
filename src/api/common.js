@@ -1,10 +1,13 @@
 import axios from '@/utils/axios.js'
+import { isLocalMock } from '@/api/config.js'
 
 // 公共热搜关键词
 export function getCommonHot (){
-  return axios.get('/common/hot')
+  let url = isLocalMock ? '/mock/common/hot.json' : '/common/hot'
+  return axios.get(url)
 }
 
 export function getCommonSearch (){
-  return axios.get('/common/search/history')
+  let url = isLocalMock ? '/mock/common/hot.json' : '/common/search/history'
+  return axios.get(url)
 }
