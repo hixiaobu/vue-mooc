@@ -1,16 +1,30 @@
 <template>
     <div class="course-wrap">
-        <div class="wrap-item" v-for="(item,index) in courseList" :key="index">
-            <course-script class="course-script" :script="item.script" v-if="item.script"></course-script>
-            <course-rate class="course-rate" :rate="item.process" v-if="item.process"></course-rate>
-            <div class="course-img">
+        <div class="wrap-item" :style="getCourseStyle(index)" v-for="(item,index) in courseList" :key="index">
+            <course-script class="course-script" :script="module=='home'?item.script:item.type" v-if="module=='home'?showItem(item.script):showItem(item.type)"></course-script>
+            <course-rate class="course-rate" :rate="module=='home'?item.process:item.rate" v-if="module=='home'?showItem(item.process):showItem(item.rate)"></course-rate>
+            <!-- 课程图片 -->
+            <div class="course-img" :style="getImgStyle()">
+                <!-- 阴影 实战课程才显示-->
+                <div class="course-gradient" v-if="module=='practice'"></div>
+                <!-- 课程图片 -->
                 <img :src="item.img" alt />
-                <div class="course-label">
+                <!-- 免费课程tap -->
+                <div class="course-label" v-if="showItem(item.tags)">
                     <label v-for="(itemtag,index) in item.tags" :key="index">{{itemtag}}</label>
                 </div>
+                <!-- 实战课程teacher -->
+                <div class="lecturer-info" v-if="module=='practice'">
+                    <img :src="item.teacher.avatar" alt="">
+                    <span>{{item.teacher.name}}</span>
+                    <div class="course-update" v-if="showItem(item.lastUpdate)">更新于<br>{{item.lastUpdate}}</div>
+                </div>
             </div>
+            <!-- 课程内容 -->
             <div class="course-card">
+                <!-- 名称 -->
                 <h3 class="course-card-name">{{item.name||item.title}}</h3>
+                <!-- 底部 -->
                 <div class="course-card-bottom">
                     <div class="course-card-info">
                         <span v-if="showItem(item.type)">{{item.type}}</span>
@@ -19,19 +33,41 @@
                             <i class="iconfont icon-ren"></i>
                             {{item.number}}
                         </span>
-                        <span>
-                            <course-star :score="item.star" v-if="item.star"></course-star>
+                        <!-- 星级评分(首页) -->
+                        <span v-if="showItem(item.star)">
+                            <course-star :score="item.star"></course-star>
                         </span>
+                        <!-- 评价(实战课程) -->
+                        <span class="right" v-if="showItem(item.comment)">{{item.comment}}人评价</span>
+                        <!-- 评价内容 -->
+                        <div class="evaluation-desc-box" v-if="module=='practice'">
+                            <div class="left-box">
+                                <p>好评度</p>
+                                <p class="big-text">100%</p>
+                                <p>{{item.comment}}人评价</p>
+                            </div>
+                            <div class="right-box">
+                                <p>内容实用<span>10</span></p>
+                                <p>通俗易懂<span>10</span></p>
+                                <p>逻辑清晰<span>10</span></p>
+                            </div>
+                        </div>
                     </div>
+                    <!-- 课程你描述 -->
                     <div class="course-card-desc" v-if="showItem(item.desc)">{{item.desc}}</div>
+                    <!-- 课程报价 -->
                     <div class="course-card-price">
-                        <span>{{item.price==0?"免费":"¥ "+item.price}}</span>
+                        <span class="price" v-if="showItem(item.price)">{{item.price==0?"免费":"¥ "+item.price}}</span>
+                        <span class="newprice" v-if="showItem(item.newPrice)">¥ {{item.newPrice}}</span>
+                        <span class="oldprice" :style="getTextDecoration(item.newPrice)" v-if="showItem(item.oldPrice)">¥ {{item.oldPrice}}</span>
                         <div class="course-card-like"  :style="getIsLikeColor(item.isLike)" v-if="item.isLike!=null">
                             <i class="iconfont icon-shoucang"></i>
                             <span>{{item.isLike?"已收藏":"收藏"}}</span>
                         </div>
-                    </div>
-                    
+                    </div>  
+                    <div class="bot-discount" v-if="item.isDiscount">
+                        <span class="sales-tip">限时优惠</span>
+                    </div>                
                 </div>
             </div>
         </div>
@@ -44,7 +80,7 @@ import CourseRate from '@/base/common/rate.vue'
 import CourseStar from '@/base/common/star.vue'
 export default {
     name: 'CourseList',
-    props: ['courseList'],
+    props: ['courseList','module'],
     components: {
         CourseScript,
         CourseRate,
@@ -53,7 +89,7 @@ export default {
   methods:{
     //是否显示
     showItem(value){
-        if(value==null){
+        if(value==null||value==""||value=="undefined"){
             return false
         }
         return true
@@ -63,6 +99,82 @@ export default {
         if(islike){
             return {
                 'color':'rgba(240, 20, 20, 0.6)'
+            }
+        }
+    },
+    // 获取oldPrice样式
+    getTextDecoration(newprice){
+        if(newprice!=""){
+            return {
+                'text-decoration': 'line-through'
+            }
+        }
+    },
+    // 单个课程样式
+    getCourseStyle(index){
+        if(this.module=="home"){
+            if((index+1)%5==0){
+                return {
+                    'width':'216px',
+                    // 'height':'286px',
+                    'margin-bottom':'12px'
+                }
+            }
+            else{
+                return {
+                    'width':'216px',
+                    // 'height':'286px',
+                    'margin-bottom':'12px',
+                    'margin-right': '18px'
+                }
+            }
+        }
+        if(this.module=="free"){
+            if((index+1)%6==0){
+                return {
+                    'width':'216px',
+                    // 'height':'286px',
+                    'margin-bottom':'18px'
+                }
+            }
+            else{
+                return {
+                    'width':'216px',
+                    // 'height':'286px',
+                    'margin-bottom':'18px',
+                    'margin-right': '18px'
+                }
+            }
+        }
+        if(this.module=="practice"){
+            if((index+1)%4==0){
+                return {
+                    'width':'270px',
+                    // 'height':'336px',
+                    'margin-bottom':'36px'
+                }
+            }
+            else{
+                return {
+                    'width':'270px',
+                    // 'height':'336px',
+                    'margin-bottom':'36px',
+                    'margin-right': '24px'
+                }
+            }
+        }
+        
+    },
+    // 图片样式
+    getImgStyle(){
+        if(this.module=="free"){
+            return {
+                'height':'120px'
+            }
+        }
+        if(this.module=="practice"){
+            return {
+                'height':'148px'
             }
         }
     }
@@ -75,7 +187,7 @@ export default {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    justify-content: space-between;
+    // justify-content: space-between;
     position: relative;
     .wrap-item 
         position: relative;
@@ -84,8 +196,9 @@ export default {
         border-radius: 4px;
         cursor: pointer;
         &:hover 
-            .course-card .course-card-name 
-                color: #F20D0D !important; 
+            .course-card 
+                .course-card-name 
+                    color: #F20D0D !important; 
         .course-script
             position: absolute;
             top: 8px;
@@ -111,10 +224,19 @@ export default {
             box-sizing: border-box;
             z-index: 1;
         .course-img 
-            width: 216px;
-            height: 120px;
             position: relative;
+            width: 100%;
+            height: 120px;
             border-radius: 8px;
+            .course-gradient
+                position: absolute;
+                left: 0;
+                bottom: 0;
+                right: 0;
+                z-index: 0;
+                background-image: linear-gradient(-180deg,rgba(7,17,27,0) 0,rgba(7,17,27,.6) 97%);
+                border-radius: 12px;
+                height: 74px;
             img 
                 width: 100%;
                 height: 100%;
@@ -136,7 +258,36 @@ export default {
                     margin-bottom: 2px;
                     font-weight: 200;    
                     &:nth-last-child
-                        margin-right: 0;               
+                        margin-right: 0;  
+            .lecturer-info
+                position: absolute;
+                left: 16px;
+                right: 16px;
+                bottom: 16px;
+                height: 36px;   
+                img 
+                    float: left;
+                    width: 36px;
+                    height: 36px;
+                    border-radius: 50%;
+                    margin-right: 12px;  
+                span 
+                    float: left;
+                    padding-top: 18px;
+                    font-size: 14px;
+                    color: #fff;
+                    line-height: 18px;
+                    text-shadow: 0 2px 4px rgba(7,17,27,.5);
+                    font-weight: 700;
+                    max-width: 114px;     
+                    ellipsis() 
+                .course-update
+                    line-height: 18px;
+                    padding-top: 1px;
+                    text-align: right;
+                    font-size: 12px;
+                    color: #fff;
+                    text-shadow: 0 1px 2px rgba(7,17,27,.5);  
         .course-card 
             padding: 8px;
             .course-card-name 
@@ -151,10 +302,13 @@ export default {
                 display: -webkit-box;
                 -webkit-box-orient: vertical;
             .course-card-bottom 
+                margin-top: 8px;
+                &:hover 
+                    .course-card-info,.course-card-desc 
+                        color: #4d555d !important;
                 .course-card-info 
                     // display: flex;
                     // justify-content: space-between;
-                    margin-top: 8px;
                     font-size: 12px;
                     color: #93999F;
                     line-height: 24px;
@@ -166,6 +320,53 @@ export default {
                         .iconfont 
                             font-size: 12px;
                             color: #93999F;
+                    .right
+                        float: right;
+                        position: relative;
+                        margin-right: 0;
+                        &:hover +.evaluation-desc-box
+                            display: block;
+                    .evaluation-desc-box
+                        display: none;
+                        position: absolute;
+                        top: 240px;
+                        width: 246px;
+                        padding: 16px 0;
+                        background: #f90;
+                        border-radius: 4px;
+                        z-index: 1;
+                        &:after
+                            content:"";
+                            position: absolute;
+                            top: -6px;
+                            right: 18px;
+                            width: 0;
+                            height: 0;
+                            border-left: 6px solid transparent;
+                            border-right: 6px solid transparent;
+                            border-bottom: 6px solid #f90;
+                        p
+                            font-size: 12px;
+                            line-height: 12px;
+                            color: #fff;
+                        .left-box
+                            float: left;
+                            width: 126px;
+                            text-align: center;
+                            border-right: 1px solid rgba(255,255,255,.4);
+                            box-sizing: border-box;
+                            .big-text
+                                font-size: 20px;
+                                line-height: 20px;
+                                margin: 4px 0;
+                        .right-box
+                            float: left;
+                            width: 120px;
+                            text-align: center;
+                            span 
+                                margin-left: 4px;
+                            p:nth-child(2)
+                                margin: 8px 0;
                 .course-card-desc
                     margin-top: 4px;
                     margin-bottom: 4px;
@@ -183,10 +384,13 @@ export default {
                     line-height: 24px;
                     font-size: 12px;
                     color: #4d555d;
-                    span 
+                    .price 
                         font-weight: 700;
-                        // display: inline-block;
-                        // vertical-align: unset;
+                    .newprice
+                        margin-right: 4px;
+                        color: #f01414;
+                    .oldprice
+                        color: #4d555d;
                     .course-card-like
                         // display: inline-block;
                         float: right;
@@ -201,4 +405,16 @@ export default {
                             font-size: 12px;
                             margin-left: 2px;
                             font-weight: 700;
+                .bot-discount
+                    padding-top: 4px;
+                    .sales-tip
+                        float: left;
+                        padding: 0 4px;
+                        background: rgba(240,20,20,.6);
+                        border-radius: 2px;
+                        font-size: 12px;
+                        color: #fff;
+                        line-height: 20px;
+                        height: 20px;
+
 </style>

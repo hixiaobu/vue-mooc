@@ -29,7 +29,7 @@
     </div>
     <!-- 课程列表 -->
     <div class="course-box">
-      <course-module :courseList="courseList"></course-module>
+      <course-module :courseList="courseList" module="free"></course-module>
     </div>
   </div>
 </template>

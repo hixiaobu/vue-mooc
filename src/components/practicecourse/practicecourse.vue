@@ -33,8 +33,8 @@
           <li class="nav-item" :class="{active:navindex===index}" v-for="(item,index) in LessonNav[0].data" :key="index" @click="handleChangeNav(index,item)">{{item}}</li>
         </ul>
       </div>
-      <div class="skill-box" :class="{boxhover:skillhover}">
-        <div  class="skill-wrap" :class="{skillhover:skillhover}" @mouseenter="handleMouseEnter($event)" @mouseleave="handleMouseLeave">
+      <div class="skill-box" :class="{boxhover:ishover===true}">
+        <div  class="skill-wrap" :class="{skillhover:ishover===true}" @mouseenter="handleMouseEnter($event)" @mouseleave="handleMouseLeave">
           <ul>
             <li class="skill-item" :class="{active:categoryindex===index}" v-for="(item,index) in categoryList" :key="index">{{item}}</li>
           </ul>
@@ -47,12 +47,12 @@
       <!-- screening-box -->
       <div class="screening-box">
         <ul>
-          <li :class="{active:coursetoolindex===index}" v-for="(item,index) in toolList" :key="index">{{item}}</li>
+          <li :class="{active:coursetoolindex===index}" v-for="(item,index) in toolList" :key="index" @click="handleBarClick(index)">{{item}}</li>
         </ul>
         <span>课程上新预告</span>
       </div>
       <!-- 课程模块 -->
-      <course-module :courseList="LessonList"></course-module>     
+      <course-module :courseList="LessonList" module="practice"></course-module>     
       <!-- footer-course -->
       <div class="footer-box">
         <span class="footer-item python" title="python"></span>
@@ -83,7 +83,7 @@ export default {
       categoryindex:0,//分类索引
       toolList:[],//课程工具栏
       coursetoolindex:0,//课程工具栏索引
-      skillhover:false
+      ishover:false
     }
   },
   created(){
@@ -130,6 +130,13 @@ export default {
         let { code, data }=res
         if(code==ERR_OK){
           this.LessonList=data
+          if(this.toolList[this.coursetoolindex]=="最新"){
+
+          }else if(this.toolList[this.coursetoolindex]=="销量"){
+            this.LessonList.sort(this.sortNumber)
+          }else if(this.toolList[this.coursetoolindex]=="升级"){
+            // this.LessonList.sort(this.rank)
+          }
         }
       })
     },
@@ -160,18 +167,26 @@ export default {
           return
         }
       })
-      console.log(this.categoryList)
     },
     // 技能 鼠标移入事件
     handleMouseEnter($event){
-      if(this.categoryindex==0){
-        console.log($event)
-        this.skillhover=true
+      if(this.navindex==0){
+        this.ishover=true
       }
     },
     // 鼠标离开事件
     handleMouseLeave(){
-      this.skillhover=false
+      this.ishover=false
+    },
+    // 销量数据排序
+    sortNumber(a,b)
+    {
+      return b.number - a.number
+    },
+    // 排序事件
+    handleBarClick(index){
+      this.coursetoolindex=index
+      this.getLessonListData()
     }
   }
 }
@@ -319,19 +334,13 @@ export default {
               width: 16px;
               height: 3px;
               margin-left: -8px;
+    .boxhover
+      &:hover
+        height: 132px;
     .skill-box
       position: relative;
       padding: 24px 0 10px;
       width:100%;
-    .boxhover
-      &:hover
-        height: 132px;
-      .skill-wrap
-        display: block;
-        width: 100%;
-        max-height: 132px;
-        overflow: hidden;
-        background: #f8fafc;
       .skillhover
         &:hover
           position: absolute;
@@ -339,6 +348,12 @@ export default {
           height: 274px;
           z-index: 5;
           box-shadow: rgba(28,31,33,0.2) 0px 16px 16px 0px;
+      .skill-wrap
+        display: block;
+        width: 100%;
+        max-height: 132px;
+        overflow: hidden;
+        background: #f8fafc; 
         ul
           margin: 0 auto;
           width: 1152px;

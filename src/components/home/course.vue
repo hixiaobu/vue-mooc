@@ -12,7 +12,7 @@
           </div>
         </div>
         <!-- 课程数据 -->
-        <course-module :courseList='items.data'></course-module>
+        <course-module :courseList='items.data' module="home"></course-module>
       </div>
     </div>
   </div>
