@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div>233</div>
-    <recommend-course  :recommendList="freeDetail.recommend"></recommend-course>
+    <recommend-course v-if="recommend.data && recommend.data.length > 0"  :recommendList="recommend"></recommend-course>
   </div>
 </template>
 <script>
@@ -28,8 +28,13 @@ export default {
         if( code == ERR_OK ){
           this.freeDetail=data
         }
-        console.log(this.freeDetail.recommend)
+        console.log(this.freeDetail)
       })
+    }
+  },
+  computed: {
+    recommend () {
+      return this.freeDetail.recommend ? this.freeDetail.recommend : {}
     }
   }
 }

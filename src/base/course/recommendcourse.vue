@@ -1,10 +1,10 @@
 <template>
   <div class="container">
-    <h3 class="head-box" v-if="recommendList && recommendList.length>0">
+    <h3 class="head-box">
       <span class="head-title">{{recommendList.title}}</span>
       <span class="head-more">更多<i>></i></span>
     </h3>
-    <ul class="aside-course" v-if="recommendList && recommendList.length>0">
+    <ul class="aside-course">
       <li  v-for="(item,index) in recommendList.data" :key="index">
         <div class="course-img">
           <img :src="item.url" alt="">
