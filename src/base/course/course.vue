@@ -1,6 +1,6 @@
 <template>
     <div class="course-wrap">
-        <div class="wrap-item" :style="getCourseStyle(index)" v-for="(item,index) in courseList" :key="index">
+        <div class="wrap-item" :style="getCourseStyle(index)" v-for="(item,index) in courseList" :key="index" @click="handleToDetail">
             <course-script class="course-script" :script="module=='home'?item.script:item.type" v-if="module=='home'?showItem(item.script):showItem(item.type)"></course-script>
             <course-rate class="course-rate" :rate="module=='home'?item.process:item.rate" v-if="module=='home'?showItem(item.process):showItem(item.rate)"></course-rate>
             <!-- 课程图片 -->
@@ -60,9 +60,10 @@
                         <span class="price" v-if="showItem(item.price)">{{item.price==0?"免费":"¥ "+item.price}}</span>
                         <span class="newprice" v-if="showItem(item.newPrice)">¥ {{item.newPrice}}</span>
                         <span class="oldprice" :style="getTextDecoration(item.newPrice)" v-if="showItem(item.oldPrice)">¥ {{item.oldPrice}}</span>
-                        <div class="course-card-like"  :style="getIsLikeColor(item.isLike)" v-if="item.isLike!=null">
-                            <i class="iconfont icon-shoucang"></i>
-                            <span>{{item.isLike?"已收藏":"收藏"}}</span>
+                        <div class="course-card-like">                
+                            <span class="course-collect"  :style="getIsLikeColor(item.isLike)" v-if="item.isLike!=null"><i class="iconfont icon-shoucang"></i>{{item.isLike?"已收藏":"收藏"}}</span>
+                            <div class="line" v-if="module=='practice'"></div>
+                            <span class="course-acart" v-if="module=='practice'">加购物车</span>
                         </div>
                     </div>  
                     <div class="bot-discount" v-if="item.isDiscount">
@@ -176,6 +177,12 @@ export default {
             return {
                 'height':'148px'
             }
+        }
+    },
+    // 点击跳转详情
+    handleToDetail(){
+        if(this.module=="free"){
+            this.$router.push('/freecoursedetail')
         }
     }
   }
@@ -395,16 +402,24 @@ export default {
                         // display: inline-block;
                         float: right;
                         color: #b7bbbf;
-                        &:hover 
-                            color: #4d555d !important;
+                        line-height: 24px;
                         .iconfont
                             float: left;
                             font-size: 16px;
-                        span 
+                        .course-collect,.course-acart 
                             float: left;
+                            color: #b7bbbf;
+                            line-height: 24px;
                             font-size: 12px;
-                            margin-left: 2px;
-                            font-weight: 700;
+                            &:hover 
+                                color: #4d555d !important;
+                        .line
+                            float: left;
+                            display: inline-block;
+                            margin: 6px 16px 0;
+                            width: 2px;
+                            height: 12px;
+                            background: #d9dde1;
                 .bot-discount
                     padding-top: 4px;
                     .sales-tip

@@ -13,6 +13,12 @@ export function getCourseList(){
   return axios.get(url)
 }
 
+// 获取免费课程详情
+export function getCourseDetail(){
+  let url=isLocalMock ? '/mock/course/detail.json' : '/course/detail'
+  return axios.get(url)
+}
+
 // 获取实战课程导航
 export function getLessonNav(){
   let url = isLocalMock ? '/mock/lesson/nav.json' : '/lesson/nav'
@@ -22,5 +28,11 @@ export function getLessonNav(){
 // 获取实战课程列表
 export function getLessonList(){
   let url = isLocalMock ? '/mock/lesson/list.json' : '/lesson/list'
+  return axios.get(url)
+}
+
+// 获取实战课程详情
+export function getLessonDetail(){
+  let url=isLocalMock ? '/mock/lesson/detail.json' : '/lesson/detail'
   return axios.get(url)
 }
