@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { ERR_OK, isLocalMock } from '@/api/config.js'
 
-const baseUrl =  isLocalMock ? '' : 'https://www.easy-mock.com/mock/5d2037e9336b67021a4c918e/vue-mooc'
+const baseUrl =  isLocalMock ? '' : 'https://wangtunan.github.io/vue-mooc'
 const service = axios.create({
   baseURL: baseUrl,
   timeout: 10000
@@ -9,8 +9,7 @@ const service = axios.create({
 
 // 请求拦截
 service.interceptors.request.use(
-  config =>{
-    config.headers['token'] = '635+56645456456'
+  config => {
     return config
   },
   error => {
